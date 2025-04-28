@@ -1,0 +1,48 @@
+{
+    "MLCS": {
+        "markets": [
+            {"name": "巴西", "is_show": 1},
+            {"name": "加拿大", "is_show": 1},
+            {"name": "墨西哥", "is_show": 1},
+            {"name": "美国", "is_show": 1}
+        ]
+    },
+    "佰格": {
+        "markets": [
+            {"name": "德国", "is_show": 1},
+            {"name": "西班牙", "is_show": 0},
+            {"name": "法国", "is_show": 0},
+            {"name": "英国", "is_show": 1},
+            {"name": "意大利", "is_show": 0},
+            {"name": "荷兰", "is_show": 0},
+            {"name": "波兰", "is_show": 0},
+            {"name": "瑞典", "is_show": 0}
+        ]
+    },
+    "凡盟": {
+        "markets": [
+            {"name": "巴西", "is_show": 1},
+            {"name": "加拿大", "is_show": 1},
+            {"name": "墨西哥", "is_show": 1},
+            {"name": "美国", "is_show": 1}
+        ]
+    },
+    "大哲": {
+        "markets": [
+            {"name": "德国", "is_show": 1},
+            {"name": "西班牙", "is_show": 1},
+            {"name": "法国", "is_show": 1},
+            {"name": "英国", "is_show": 1},
+            {"name": "意大利", "is_show": 1},
+            {"name": "荷兰", "is_show": 1},
+            {"name": "波兰", "is_show": 1},
+            {"name": "瑞典", "is_show": 1}
+        ]
+    },
+    "小白": {
+        "markets": [
+            {"name": "巴西", "is_show": 1},
+            {"name": "加拿大", "is_show": 1}
+        ]
+    }
+}
