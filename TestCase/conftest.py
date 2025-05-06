@@ -1,8 +1,14 @@
+import sys
+from pathlib import Path
 import pytest
 import logging
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
-from Base.base_page import BasePage
+
+# 添加项目根目录到Python路径（绝对路径）
+sys.path.append(str(Path(__file__).resolve().parent.parent))
+# from Base.base_page import BasePage
+from PageObject.page_login import LoginPage
 from Base.config import USERNAME, PASSWORD
 import datetime
 
