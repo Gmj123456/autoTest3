@@ -33,6 +33,18 @@ class LoginPage(BasePage):
     NOTIFICATION_CLOSE_BUTTON = (By.CSS_SELECTOR,
                                  "body > div.ant-notification.ant-notification-topRight > span > div > a > span > i > svg")  # 登录成功通知框的定位器（遮挡退出登录按钮）
 
+    # 登录失败弹框
+    LOGIN_FAIL_ALERT = (By.CSS_SELECTOR, "body > div.ant-notification.ant-notification-topRight > span > div > div > div > div.ant-notification-notice-message:has-text('登录失败')")
+
+    def is_login_failure(self, timeout=5):
+        try:
+            WebDriverWait(self.driver, timeout).until(
+                EC.visibility_of_element_located(self.LOGIN_FAIL_ALERT)
+            )
+            return True
+        except Exception:
+            return False
+
     # 输入用户名
     def input_username(self, username):
         self.input(self.username_input, username)
@@ -42,11 +54,8 @@ class LoginPage(BasePage):
         self.input(self.password_input, password)
 
     def save_captcha_image(self):
-        """保存验证码图片"""
         current_dir = Path(__file__).parent.resolve()
-        config_dir = current_dir.parent / 'Base'/'utils'
-        config_dir.mkdir(parents=True, exist_ok=True)
-        captcha_path = config_dir / 'captcha.png'
+        captcha_path = current_dir.parent.parent / 'Base'/'utils'/'captcha.png'
 
         try:
             # captcha_image = self.locator(*self.code_image)
@@ -104,6 +113,20 @@ class LoginPage(BasePage):
     # 点击登录按钮
     def click_login_button(self):
         self.click(self.login_button)
+
+    def is_login_success(self):
+        """验证登录是否成功"""
+        try:
+            WebDriverWait(self.driver, 10).until(
+                EC.url_to_be(LOGIN_SUCCESS_URL)
+            )
+            WebDriverWait(self.driver, 5).until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, ".ant-dropdown-trigger"))
+            )
+            return True
+        except Exception as e:
+            logging.error(f"登录状态验证失败: {e}")
+            return False
 
     def check_login_result(self, attempts):
         """检查登录结果，等待页面 URL 变为登录成功后的 URL，最多等待 5 秒"""

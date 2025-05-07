@@ -12,9 +12,7 @@ from PageObject.page_login import LoginPage
 from Base.config import USERNAME, PASSWORD
 import datetime
 
-# # 调用统一的日志配置
-# logger = setup_logging()
-
+# 调用统一的日志配置
 from Base.config import CHROME_DRIVER_PATH
 # 记录使用的 ChromeDriver 路径
 logging.info(f"使用的 ChromeDriver 路径: {CHROME_DRIVER_PATH}")
@@ -49,14 +47,29 @@ def logged_in():
 def pytest_runtest_setup(item):
     """记录测试用例开始时间"""
     start_time = datetime.datetime.now()
-    logger.info(f"Test case {item.name} started at {start_time}")
-    outcome = yield
-    # 这里可以添加更多的清理逻辑
+    logging.info(f"Test case {item.name} started at {start_time}")
+    yield
 
-@pytest.hookimpl(hookwrapper=True)
+# 在pytest_runtest_teardown钩子中  
 def pytest_runtest_teardown(item):
     """记录测试用例结束时间"""
-    outcome = yield
     end_time = datetime.datetime.now()
-    logger.info(f"Test case {item.name} ended at {end_time}")
+    logging.info(f"Test case {item.name} ended at {end_time}")
     # 这里可以添加更多的清理逻辑
+
+# 新增失败截图功能：
+@pytest.hookimpl(tryfirst=True, hookwrapper=True)
+def pytest_runtest_makereport(item, call):
+    # 实现失败时自动截图并记录错误日志
+    # 截图保存路径：TestCase/screenshots/
+    outcome = yield
+    report = outcome.get_result()
+    if report.when == 'call' and report.failed:
+        driver = item.funcargs.get('logged_in')
+        if driver:
+            timestamp = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
+            screenshots_dir = Path(__file__).parent / 'screenshots'
+            screenshots_dir.mkdir(exist_ok=True)
+            file_path = screenshots_dir / f'failure_{item.name}_{timestamp}.png'
+            driver.save_screenshot(str(file_path))
+            logging.error(f'测试失败截图已保存至：{file_path}')
